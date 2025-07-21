@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import logging
+import os
 
 from routes import router
 from database import test_connection, engine, Base, AsyncSessionLocal
@@ -387,10 +388,13 @@ async def main():
 # Main entry point for development
 if __name__ == "__main__":
     import uvicorn
+    
+    # Use PORT environment variable for production (Render) or default to 8000 for local
+    port = int(os.environ.get("PORT", 8000))
+    
     uvicorn.run(
-        "main:app",
+        "app.main:app",
         host="0.0.0.0",
-        port=8000,
-        reload=True,
-        log_level="info"
+        port=port,
+        reload=False  # Disable reload in production
     )
