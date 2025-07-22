@@ -13,28 +13,51 @@ logger = logging.getLogger(__name__)
 async def create_expense(expense_data: CreateExpense, db: AsyncSession) -> Expense:
     """
     Create a new expense with validation for split logic.
+    Auto-infers participants if not provided.
     """
     try:
         # Validate amount
         if expense_data.amount <= 0:
             raise ValueError("Amount must be positive")
         
-        # Validate paid_by is in participants
-        if expense_data.paid_by not in expense_data.participants:
-            raise ValueError("paid_by must be one of the participants")
+        # Auto-infer participants if not provided
+        participants = expense_data.participants
+        if participants is None:
+            # Get all unique people from existing expenses
+            all_people = await get_all_people(db)
+            if all_people:
+                participants = all_people
+            else:
+                # If no existing people, use just the payer
+                participants = [expense_data.paid_by]
         
-        # Validate split logic
-        _validate_split_logic(expense_data)
+        # Ensure paid_by is in participants
+        if expense_data.paid_by not in participants:
+            participants.append(expense_data.paid_by)
         
-        # Create expense instance
-        db_expense = Expense(
+        # Create a complete expense object for validation
+        complete_expense_data = CreateExpense(
             amount=expense_data.amount,
             description=expense_data.description,
             paid_by=expense_data.paid_by,
-            participants=expense_data.participants,
-            split_type=SplitType(expense_data.split_type),
+            participants=participants,
+            split_type=expense_data.split_type,
             shares=expense_data.shares,
             category=expense_data.category
+        )
+        
+        # Validate split logic
+        _validate_split_logic_complete(complete_expense_data)
+        
+        # Create expense instance
+        db_expense = Expense(
+            amount=complete_expense_data.amount,
+            description=complete_expense_data.description,
+            paid_by=complete_expense_data.paid_by,
+            participants=complete_expense_data.participants,
+            split_type=SplitType(complete_expense_data.split_type),
+            shares=complete_expense_data.shares,
+            category=complete_expense_data.category
         )
         
         db.add(db_expense)
@@ -346,9 +369,9 @@ async def get_all_people(db: AsyncSession) -> List[str]:
         logger.error(f"Error getting all people: {e}")
         raise
 
-def _validate_split_logic(expense_data: CreateExpense) -> None:
+def _validate_split_logic_complete(expense_data: CreateExpense) -> None:
     """
-    Validate split logic based on split type.
+    Validate split logic based on split type for complete expense data.
     """
     split_type = expense_data.split_type
     participants = expense_data.participants
@@ -396,3 +419,9 @@ def _validate_split_logic(expense_data: CreateExpense) -> None:
         total_shares = sum(shares.values())
         if abs(total_shares - amount) > 0.01:
             raise ValueError(f"Exact shares must sum to total amount {amount}, got {total_shares}")
+
+def _validate_split_logic(expense_data: CreateExpense) -> None:
+    """
+    Legacy validation function - kept for compatibility
+    """
+    return _validate_split_logic_complete(expense_data)

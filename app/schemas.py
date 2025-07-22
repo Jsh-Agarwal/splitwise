@@ -71,8 +71,29 @@ class BaseExpense(BaseModel):
         
         return v
 
-class CreateExpense(BaseExpense):
-    pass
+class CreateExpense(BaseModel):
+    amount: float = Field(..., gt=0, description="Amount must be positive")
+    description: str = Field(..., min_length=1, description="Description cannot be empty")
+    paid_by: str = Field(..., min_length=1, description="Payer name cannot be empty")
+    participants: Optional[List[str]] = Field(None, description="Participants list - if not provided, will use all known people")
+    split_type: Literal["equal", "percentage", "exact"] = "equal"
+    shares: Optional[Dict[str, float]] = None
+    category: Optional[str] = None
+    
+    @validator('participants')
+    def participants_not_empty(cls, v):
+        if v is not None:
+            if not v or any(not participant.strip() for participant in v):
+                raise ValueError('All participants must have non-empty names')
+            # Remove duplicates while preserving order
+            seen = set()
+            unique_participants = []
+            for participant in v:
+                if participant not in seen:
+                    seen.add(participant)
+                    unique_participants.append(participant)
+            return unique_participants
+        return v
 
 class UpdateExpense(BaseModel):
     amount: Optional[float] = Field(None, gt=0)
