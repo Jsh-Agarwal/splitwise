@@ -5,8 +5,8 @@ from decimal import Decimal, ROUND_HALF_UP
 from typing import List, Optional, Dict
 import logging
 
-from models import Expense, SplitType
-from schemas import CreateExpense, UpdateExpense
+from app.models import Expense, SplitType
+from app.schemas import CreateExpense, UpdateExpense
 
 logger = logging.getLogger(__name__)
 

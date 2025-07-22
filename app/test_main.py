@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-from routes import router as expense_router
-from database import engine, Base, get_db
+from app.routes import router as expense_router
+from app.database import engine, Base, get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 
