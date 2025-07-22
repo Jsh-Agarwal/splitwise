@@ -45,6 +45,84 @@ A production-ready expense sharing and bill splitting API built with FastAPI and
     - For `exact` split: Required, must sum to `amount`, keys must match participants.
 - `category` (string, optional): Any string.
 
+**Sample Requests:**
+
+*POST /api/v1/expenses* (Equal split)
+```json
+{
+  "amount": 120.0,
+  "description": "Team lunch",
+  "paid_by": "Alice",
+  "participants": ["Alice", "Bob", "Charlie"],
+  "split_type": "equal",
+  "category": "Food"
+}
+```
+
+*POST /api/v1/expenses* (Percentage split)
+```json
+{
+  "amount": 200.0,
+  "description": "Groceries",
+  "paid_by": "Bob",
+  "participants": ["Alice", "Bob", "Charlie"],
+  "split_type": "percentage",
+  "shares": {
+    "Alice": 40.0,
+    "Bob": 40.0,
+    "Charlie": 20.0
+  },
+  "category": "Groceries"
+}
+```
+
+*POST /api/v1/expenses* (Exact split)
+```json
+{
+  "amount": 150.0,
+  "description": "Movie tickets",
+  "paid_by": "Charlie",
+  "participants": ["Alice", "Bob", "Charlie"],
+  "split_type": "exact",
+  "shares": {
+    "Alice": 50.0,
+    "Bob": 50.0,
+    "Charlie": 50.0
+  },
+  "category": "Entertainment"
+}
+```
+
+*PUT /api/v1/expenses/{expense_id}* (Update amount and description)
+```json
+{
+  "amount": 180.0,
+  "description": "Updated team lunch"
+}
+```
+
+*PUT /api/v1/expenses/{expense_id}* (Update split type and shares)
+```json
+{
+  "split_type": "percentage",
+  "shares": {
+    "Alice": 50.0,
+    "Bob": 30.0,
+    "Charlie": 20.0
+  }
+}
+```
+
+*PUT /api/v1/expenses/{expense_id}* (Update category only)
+```json
+{
+  "category": "Dining"
+}
+```
+
+*DELETE /api/v1/expenses/{expense_id}*
+- No request body required. Just call the endpoint with the correct `expense_id` in the URL.
+
 **Common Error Cases:**
 - 422 Unprocessable Entity: Your request body is missing required fields, has wrong types, or fails validation (see error details in response).
 - 400 Bad Request: Business logic error (e.g., `paid_by` not in `participants`, shares do not sum correctly).
