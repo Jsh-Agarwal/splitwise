@@ -1,68 +1,68 @@
-# 💚 SplitEase - Smart Expense Sharing Made Simple
+# SplitEase - Smart Expense Sharing Made Simple
 
 A modern, full-stack expense sharing application that makes splitting bills with friends, roommates, and travel groups effortless. Built with FastAPI backend and Streamlit frontend, SplitEase provides real-time split calculations, smart settlement suggestions, and an intuitive user experience.
 
-## 📌 Project Overview
+## Project Overview
 
 **What is SplitEase?**
 
 SplitEase is a Splitwise-inspired expense sharing platform that helps you track shared expenses and automatically calculates who owes what to whom. Perfect for:
 
-- 🏠 **Roommates** - Split rent, utilities, groceries
-- 👥 **Friend Groups** - Share restaurant bills, movie tickets
-- ✈️ **Travel Groups** - Manage trip expenses, accommodations
-- 🎉 **Events** - Split party costs, group activities
+- **Roommates** - Split rent, utilities, groceries
+- **Friend Groups** - Share restaurant bills, movie tickets
+- **Travel Groups** - Manage trip expenses, accommodations
+- **Events** - Split party costs, group activities
 
-## 🚀 Key Features
+## Key Features
 
-### 💰 Expense Management
+### Expense Management
 
-- ➕ **Add Expenses** - Quick expense entry with smart validation
-- ✏️ **Edit & Delete** - Full CRUD operations with real-time preview
-- 📜 **Expense History** - Filterable list with search by person, group, category
+- **Add Expenses** - Quick expense entry with smart validation
+- **Edit & Delete** - Full CRUD operations with real-time preview
+- **Expense History** - Filterable list with search by person, group, category
 
-### 🔄 Flexible Split Methods
+### Flexible Split Methods
 
 - **Equal Split** - Divide equally among participants
 - **Percentage Split** - Custom percentage allocation with real-time validation
 - **Exact Amount Split** - Specify exact amounts per person
 
-### 🎯 Smart Features
+### Smart Features
 
 - **Auto-populate People** - Reuse participants from previous expenses
 - **Real-time Validation** - Instant feedback on split calculations
 - **Dynamic Forms** - UI adapts based on selected split method
 - **Settlement Optimization** - Minimize transactions with smart settlement suggestions
 
-### 📊 Financial Insights
+### Financial Insights
 
 - **Balance Dashboard** - See who owes what at a glance
 - **Settlement Suggestions** - Optimized payment recommendations
-- **Expense Analytics** - Track spending by category and group
+- **Expense Analytics** - Track spending by category and group [ yet to be done]
 
-## 🖥️ Frontend (Streamlit)
+## Frontend (Streamlit)
 
 The Streamlit frontend provides an intuitive, responsive interface with four main sections:
 
-### 📱 Main Pages
+### Main Pages
 
-- **➕ Add Expense** - Dynamic form with real-time split inputs
-- **✏️ Edit/Delete** - Modify existing expenses with live preview
-- **📜 Expense History** - Filterable expense list with advanced search
-- **📊 Dashboard** - Balance overview and settlement recommendations
+- **Add Expense** - Dynamic form with real-time split inputs
+- **Edit/Delete** - Modify existing expenses with live preview
+- **Expense History** - Filterable expense list with advanced search
+- **Dashboard** - Balance overview and settlement recommendations
 
-### 🎨 Dynamic UI Features
+### Dynamic UI Features
 
 - **Smart Split Inputs** - Form fields appear instantly when split method changes
 - **Real-time Validation** - Live feedback on percentage totals and exact amounts
 - **Responsive Layout** - Optimized for desktop and mobile viewing
 - **Dark Theme** - Modern dark UI with green accent colors
 
-## 🧩 Backend (FastAPI)
+## Backend (FastAPI)
 
 Production-ready REST API with comprehensive validation and error handling.
 
-### 🔗 API Endpoints
+### API Endpoints
 
 #### Expense Management
 
@@ -89,7 +89,7 @@ GET    /api/v1/health             # Database health check
 GET    /docs                      # Interactive API documentation
 ```
 
-### 📋 Sample API Requests
+### Sample API Requests
 
 **Create Equal Split Expense:**
 
@@ -121,7 +121,7 @@ GET    /docs                      # Interactive API documentation
 }
 ```
 
-## 🗃️ Tech Stack
+## Tech Stack
 
 ### Backend
 
@@ -142,27 +142,27 @@ GET    /docs                      # Interactive API documentation
 - **Streamlit Cloud** - Frontend deployment
 - **GitHub** - Version control and CI/CD
 
-## 🌐 Deployment Links
+## Deployment Links
 
-🔗 **Live App (Streamlit):** [https://splitwise-jsh.streamlit.app](https://splitwise-jsh.streamlit.app)
+**Live App (Streamlit):** [https://splitwise-jsh.streamlit.app](https://splitwise-jsh.streamlit.app)
 
-🔗 **API Base URL:** [https://splitwise-pzwt.onrender.com](https://splitwise-pzwt.onrender.com)
+**API Base URL:** [https://splitwise-pzwt.onrender.com](https://splitwise-pzwt.onrender.com)
 
-🔗 **API Documentation:** [https://splitwise-pzwt.onrender.com/docs](https://splitwise-pzwt.onrender.com/docs)
+**API Documentation:** [https://splitwise-pzwt.onrender.com/docs](https://splitwise-pzwt.onrender.com/docs)
 
-## 🧪 How to Test
+## How to Test
 
 ### Quick Start (5 minutes)
 
-1. **Open the Live App** → [SplitEase App](https://splitwise-jsh.streamlit.app)
+1. **Open the Live App** - [SplitEase App](https://splitwise-jsh.streamlit.app)
 2. **Add Your First Expense:**
    - Amount: $60
    - Description: "Dinner at restaurant"
    - Paid by: Your name
    - Participants: Add 2-3 friends
-   - Try different split methods!
-3. **Check the Dashboard** → See balances and settlements
-4. **Explore History** → Filter by person or category
+   - Try different split methods
+3. **Check the Dashboard** - See balances and settlements
+4. **Explore History** - Filter by person or category
 
 ### API Testing
 
@@ -170,8 +170,9 @@ GET    /docs                      # Interactive API documentation
 - **Interactive Docs:** Use the built-in FastAPI interface
 - **Health Check:** GET `/api/v1/health` to verify system status
 
-## 📁 Project Structure
+## Project Structure
 
+```
 splitwise/
 ├── app/                          # FastAPI Backend
 │   ├── __init__.py
@@ -185,8 +186,9 @@ splitwise/
 ├── requirements.txt              # Python dependencies
 ├── .env.example                  # Environment variables template
 └── README.md                     # Project documentation
+```
 
-## 🛠️ Local Development
+## Local Development
 
 ### Prerequisites
 
@@ -226,7 +228,7 @@ splitwise/
    # App available at http://localhost:8501
    ```
 
-## ⚠️ Known Limitations
+## Known Limitations
 
 - **Name Consistency** - Participant names must be exactly the same across expenses
 - **Currency Support** - Currently supports single currency (₹ INR)
@@ -234,28 +236,28 @@ splitwise/
 - **File Uploads** - Receipt scanning not yet implemented
 - **Mobile App** - Web-based only, no native mobile app
 
-## 🔮 Future Enhancements
+## Future Enhancements
 
-- 📱 Mobile-responsive PWA
-- 🔄 Recurring expense templates
-- 📷 Receipt scanning with OCR
-- 💱 Multi-currency support
-- 👥 User authentication & profiles
-- 📧 Email notifications for settlements
-- 📊 Advanced analytics & reporting
+- Mobile-responsive PWA
+- Recurring expense templates
+- Receipt scanning with OCR
+- Multi-currency support
+- User authentication & profiles
+- Email notifications for settlements
+- Advanced analytics & reporting
 
-## 🙌 Acknowledgements
+## Acknowledgements
 
 - **Inspired by** [Splitwise](https://splitwise.com) - The gold standard for expense sharing
 - **UI/UX Ideas** from Google Pay Bill Split feature
 - **Built with** FastAPI, Streamlit, and PostgreSQL
 - **Hosted on** Render and Streamlit Cloud
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -267,6 +269,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-**Built with ❤️ for seamless expense sharing**
+**Built with precision for seamless expense sharing**
 
-*Made by developers who got tired of calculating who owes what after every group dinner* 🍕💸
+*Professional expense management solution for modern teams and groups*
