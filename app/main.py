@@ -4,6 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import logging
 import os
+from fastapi.exceptions import RequestValidationError
+from fastapi.requests import Request
+from fastapi.responses import JSONResponse
+from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
 
 from app.routes import router
 from app.database import test_connection, engine, Base, AsyncSessionLocal
@@ -21,7 +25,49 @@ logger = logging.getLogger(__name__)
 # Create FastAPI app instance
 app = FastAPI(
     title="Splitwise API",
-    description="A expense sharing and bill splitting API built with FastAPI and PostgreSQL",
+    description="""
+A production-ready expense sharing and bill splitting API built with FastAPI and PostgreSQL.
+
+**How to Use:**
+- All endpoints are under `/api/v1`.
+- To create or update an expense, you must provide a valid JSON body matching the required schema.
+- See the `/docs` tab for interactive API usage and example requests.
+
+**Expense Requirements:**
+- `amount` (float): Must be positive.
+- `description` (string): Required, cannot be empty.
+- `paid_by` (string): Must be one of the `participants`.
+- `participants` (list of strings): At least one, all must be non-empty.
+- `split_type` (string): One of `equal`, `percentage`, or `exact`.
+- `shares` (dict):
+    - For `equal` split: Omit this field.
+    - For `percentage` split: Required, must sum to 100, keys must match participants.
+    - For `exact` split: Required, must sum to `amount`, keys must match participants.
+- `category` (string, optional): Any string.
+
+**Common Error Cases:**
+- 422 Unprocessable Entity: Your request body is missing required fields, has wrong types, or fails validation (see error details in response).
+- 400 Bad Request: Business logic error (e.g., `paid_by` not in `participants`, shares do not sum correctly).
+- 404 Not Found: Resource does not exist.
+- 500 Internal Server Error: Unexpected server error.
+
+**If you get a 422 error:**
+- Check the error response for the exact field and reason.
+- Make sure your JSON matches the schema and all requirements above.
+- Example error:
+    ```json
+    {
+      "detail": [
+        {
+          "loc": ["body", "amount"],
+          "msg": "field required",
+          "type": "value_error.missing"
+        }
+      ]
+    }
+    ```
+- For more help, see the schema in `/docs` or `/openapi.json`.
+""",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
@@ -142,6 +188,21 @@ async def internal_error_handler(request, exc):
         content={
             "error": "Internal Server Error",
             "message": "An unexpected error occurred",
+            "docs": "/docs"
+        }
+    )
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """Custom handler for 422 Unprocessable Entity errors with detailed feedback."""
+    logger.warning(f"Validation error at {request.url}: {exc.errors()}")
+    return JSONResponse(
+        status_code=HTTP_422_UNPROCESSABLE_ENTITY,
+        content={
+            "error": "Validation Error",
+            "message": "Your request did not match the required schema. See 'details' for more information.",
+            "details": exc.errors(),
+            "body": exc.body,
             "docs": "/docs"
         }
     )
